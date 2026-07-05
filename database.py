@@ -4,15 +4,17 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-print("DATABASE_URL =", DATABASE_URL)  # temporary debugging
-
-if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace(
-        "postgres://", "postgresql://", 1
-    )
+print("DATABASE_URL =", repr(DATABASE_URL))
 
 if not DATABASE_URL:
-    raise Exception("DATABASE_URL environment variable is not set")
+    raise Exception("DATABASE_URL is not set")
+
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgres://",
+        "postgresql://",
+        1
+    )
 
 engine = create_engine(DATABASE_URL)
 
