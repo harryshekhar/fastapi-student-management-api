@@ -1,17 +1,18 @@
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-# This gets the URL from Render, or uses your local one as a backup
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", 
-    "postgresql://postgres:new_secure_password@localhost:5432/studentdb"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-#render deploy
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+print("DATABASE_URL =", DATABASE_URL)  # temporary debugging
+
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgres://", "postgresql://", 1
+    )
+
+if not DATABASE_URL:
+    raise Exception("DATABASE_URL environment variable is not set")
 
 engine = create_engine(DATABASE_URL)
 
